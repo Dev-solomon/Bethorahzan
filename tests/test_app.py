@@ -257,3 +257,85 @@ def test_sidebar_full_page_height_on_desktop_only(client, app):
     assert 'height:auto' in desktop and 'align-self:stretch' in desktop
     assert 'position:sticky' in desktop and 'height:100dvh' in desktop
     assert 'position:fixed' in mobile and 'overflow-y:auto' in mobile
+
+
+def test_verified_stripe_book_purchase_reconciles_in_member_portal(client, app, member, monkeypatch):
+    """The signed webhook remains primary; the portal can recover a missed one."""
+    from models import Product, Purchase
+    from stripe.checkout import Session
+
+    with app.app_context():
+        book = Product(title='Blood & Water', slug='blood-and-water', kind='book',
+                       fulfillment_type='digital', description='Book', price_cents=2100, inventory=3)
+        db.session.add(book)
+        db.session.flush()
+        purchase = Purchase(user_id=member, product_id=book.id, amount_cents=2100,
+                            stripe_session_id='cs_test_book_payment')
+        db.session.add(purchase)
+        db.session.commit()
+        purchase_id = purchase.id
+
+    app.config['STRIPE_SECRET_KEY'] = 'sk_test_local'
+    calls = []
+
+    def get_session(session_id):
+        calls.append(session_id)
+        return {'id': 'cs_test_book_payment', 'mode': 'payment', 'status': 'complete',
+                'payment_status': 'paid', 'currency': 'usd', 'amount_total': 2100,
+                'metadata': {'kind': 'product', 'local_id': str(purchase_id)},
+                'client_reference_id': f'product:{purchase_id}',
+                'payment_intent': 'pi_test_confirmed'}
+
+    monkeypatch.setattr(Session, 'retrieve', get_session)
+    authenticate(client, 'member@example.com')
+    response = client.get('/portal')
+    assert response.status_code == 200
+    assert b'PAID' in response.data
+    assert calls == ['cs_test_book_payment']
+
+    # Revisiting the portal must not deduct stock or call Stripe again.
+    client.get('/portal')
+    with app.app_context():
+        book = Product.query.filter_by(slug='blood-and-water').one()
+        order = db.session.get(Purchase, purchase_id)
+        assert order.status == 'paid'
+        assert order.stripe_payment_intent == 'pi_test_confirmed'
+        assert book.inventory == 2
+    assert calls == ['cs_test_book_payment']
+
+
+def test_stripe_reconciliation_rejects_mismatched_or_unpaid_sessions(client, app, member, monkeypatch):
+    from models import Product, Purchase
+    from stripe.checkout import Session
+
+    with app.app_context():
+        book = Product(title='Unpaid Book', slug='unpaid-book', kind='book',
+                       fulfillment_type='digital', description='Book', price_cents=1500)
+        db.session.add(book)
+        db.session.flush()
+        purchase = Purchase(user_id=member, product_id=book.id, amount_cents=1500,
+                            stripe_session_id='cs_test_unconfirmed')
+        db.session.add(purchase)
+        db.session.commit()
+        purchase_id = purchase.id
+
+    app.config['STRIPE_SECRET_KEY'] = 'sk_test_local'
+    authenticated_session = {'id': 'cs_test_unconfirmed', 'mode': 'payment',
+                             'status': 'complete', 'payment_status': 'paid',
+                             'currency': 'usd', 'amount_total': 1499,
+                             'metadata': {'kind': 'product', 'local_id': str(purchase_id)},
+                             'client_reference_id': f'product:{purchase_id}'}
+    monkeypatch.setattr(Session, 'retrieve', lambda sid: authenticated_session)
+    authenticate(client, 'member@example.com')
+    response = client.get('/payment/result?session_id=cs_test_unconfirmed')
+    assert response.status_code == 200
+    assert b'Payment confirmed' not in response.data
+    client.get('/portal')
+    with app.app_context():
+        assert db.session.get(Purchase, purchase_id).status == 'pending'
+
+    authenticated_session['amount_total'] = 1500
+    authenticated_session['payment_status'] = 'unpaid'
+    client.get('/portal')
+    with app.app_context():
+        assert db.session.get(Purchase, purchase_id).status == 'pending'
