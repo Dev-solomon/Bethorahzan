@@ -1,0 +1,64 @@
+/* Bethorahzan: mobile header / purpose-led giving presentation (V5). */
+body.institution-app .institution-topbar{isolation:isolate;min-width:0;}
+body.institution-app .topbar-leading,body.institution-app .topbar-controls{min-width:0;}
+body.institution-app .quick-jump{flex:0 1 auto;min-width:0;}
+body.institution-app .quick-jump input{min-width:0;max-width:100%;line-height:1.4;}
+.mobile-search-trigger,.join-short,.portal-short{display:none!important;}
+/* Keep the in-page giving selector visible and useful without JavaScript. */
+body.institution-app .cause-collection{position:relative;isolation:isolate;width:100%;padding:clamp(40px,5vw,78px) 0;background:radial-gradient(ellipse at 85% 5%,rgba(236,172,103,.12),transparent 45%),linear-gradient(145deg,#0b2131,#102c3e 60%,#091c2a);color:#fbf6ef;border-block:1px solid rgba(238,181,117,.27)}
+body.institution-app .cause-collection:before{content:"";position:absolute;inset:0;z-index:-1;pointer-events:none;background-image:linear-gradient(90deg,rgba(244,186,125,.06) 1px,transparent 1px),linear-gradient(rgba(244,186,125,.05) 1px,transparent 1px);background-size:72px 72px;mask-image:linear-gradient(90deg,transparent,#000)}
+body.institution-app .cause-collection-head{display:flex;align-items:end;justify-content:space-between;gap:24px;margin-bottom:clamp(22px,3vw,35px)}
+body.institution-app .cause-collection-head h2{font-family:"Times New Roman",Times,serif;font-size:clamp(34px,3.8vw,59px);line-height:1.09;max-width:720px;margin:15px 0 14px;letter-spacing:-.035em}
+body.institution-app .cause-collection-head h2 em{color:#edb17e;font-weight:400}
+body.institution-app .cause-collection-head p{font:400 18px/1.6 "Times New Roman",serif;color:#bbccd5;max-width:680px;margin:0}
+body.institution-app .cause-collection-index{font:800 10px/1.6 Manrope,sans-serif;letter-spacing:.2em;color:#e5af7f;white-space:nowrap}
+body.institution-app .cause-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:clamp(12px,1.4vw,22px)}
+body.institution-app .cause-choice{appearance:none;display:flex;flex-direction:column;align-items:flex-start;text-align:left;min-width:0;width:100%;min-height:255px;padding:clamp(18px,2vw,30px);border:1px solid rgba(231,193,149,.32);border-radius:13px;background:linear-gradient(135deg,rgba(255,255,255,.085),rgba(12,37,53,.78));color:#fdf8f0;box-shadow:0 15px 36px rgba(0,0,0,.1);cursor:pointer;transition:background .25s,border-color .25s,transform .25s,box-shadow .25s}
+body.institution-app .cause-choice:hover,body.institution-app .cause-choice:focus-visible,body.institution-app .cause-choice[aria-pressed="true"]{border-color:#efb477;background:linear-gradient(135deg,rgba(216,126,65,.20),rgba(13,48,67,.94));box-shadow:0 15px 42px rgba(0,0,0,.22);transform:translateY(-3px)}
+body.institution-app .cause-choice:focus-visible{outline:2px solid #f3c48b;outline-offset:3px}
+body.institution-app .cause-number{font:750 9px Manrope,sans-serif;letter-spacing:.19em;color:#d8ae85}
+body.institution-app .cause-symbol{width:54px;height:54px;border:1px solid rgba(230,181,131,.45);border-radius:12px;display:grid;place-items:center;font-size:27px;margin:19px 0;color:#f0b47f;background:linear-gradient(135deg,#352e2d,#173b4c)}
+body.institution-app .cause-choice strong{font:400 clamp(22px,2vw,30px)/1.16 "Times New Roman",Times,serif;letter-spacing:-.025em;margin-bottom:10px}
+body.institution-app .cause-description{font:400 14px/1.6 "DM Sans",sans-serif;color:#c0cdd2;flex:1}
+body.institution-app .cause-choice-action{display:flex;align-items:center;gap:10px;margin-top:23px;border-top:1px solid rgba(233,186,137,.25);padding-top:13px;width:100%;font:800 9px Manrope,sans-serif;letter-spacing:.12em;color:#f0b57e}
+body.institution-app .cause-choice[aria-pressed="true"] .cause-choice-action:before{content:"✓";font-size:15px;color:#f7d9ae}
+body.institution-app .cause-empty{grid-column:1/-1;padding:26px;border:1px dashed #b79b77;border-radius:12px;color:#f0e6da}
+body.institution-app .cause-empty a{color:#f1b787}
+body.institution-app #givingForm{scroll-margin-top:105px}
+@media(max-width:1199.98px){body.institution-app .cause-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:850px){body.institution-app .topbar-location{display:none}}
+@media(max-width:700px){
+ body.institution-app .institution-topbar{height:64px;min-height:64px;display:flex;align-items:center;justify-content:space-between;flex-wrap:nowrap;gap:8px;padding-inline:12px!important;overflow:visible}
+ body.institution-app .topbar-leading{flex:0 0 auto;gap:0}
+ body.institution-app .topbar-controls{display:flex;align-items:center;justify-content:flex-end;flex:1 1 auto;min-width:0;gap:7px!important;margin:0}
+ body.institution-app .mobile-search-trigger{display:inline-flex!important;flex:0 0 37px;width:37px;height:37px;align-items:center;justify-content:center;background:rgba(255,255,255,.065);color:#f8dcc0;border:1px solid rgba(230,197,157,.32);border-radius:9px;font-size:16px;padding:0}
+ body.institution-app .mobile-search-trigger:focus-visible{outline:2px solid #f5bf8e;outline-offset:2px}
+ body.institution-app .quick-jump,body.institution-app .quick-jump:focus-within{display:none!important;position:absolute;top:calc(100% + 7px);left:12px;right:12px;width:auto!important;min-width:0!important;min-height:49px;height:49px;margin:0;z-index:1100;padding:0 13px;border-radius:10px;background:#122c40;box-shadow:0 12px 30px #071624bd,0 0 0 1px #c89168}
+ body.institution-app .institution-topbar.mobile-search-open .quick-jump,body.institution-app .institution-topbar.mobile-search-open .quick-jump:focus-within{display:flex!important}
+ body.institution-app .quick-jump>input,body.institution-app .quick-jump:focus-within>input{display:block!important;opacity:1!important;width:100%!important;font-size:14px!important;line-height:1.45;color:#fff}
+ body.institution-app .quick-jump kbd{display:none!important}
+ body.institution-app .quick-jump .jump-results{top:calc(100% + 6px);width:100%;z-index:3}
+ body.institution-app .topbar-location{display:none!important}
+ body.institution-app .topbar-login{display:inline-flex;align-items:center;justify-content:center;height:37px;padding:0 10px!important;white-space:nowrap;font-size:11px!important;margin:0}
+ body.institution-app .topbar-action{display:inline-flex;align-items:center;justify-content:center;height:37px;min-height:37px;padding:0 11px!important;font-size:11px!important;white-space:nowrap;gap:3px}
+ body.institution-app .topbar-action i{display:none!important}
+ body.institution-app .theme-toggle{flex:0 0 36px;width:36px;height:36px}
+ .join-long,.portal-long{display:none!important}.join-short,.portal-short{display:inline!important}
+ body.institution-app .cause-collection-head{align-items:start;flex-direction:column;gap:8px}
+ body.institution-app .cause-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:11px}
+ body.institution-app .cause-choice{min-height:220px;padding:15px}
+ body.institution-app .cause-description{font-size:12px}
+ body.institution-app .cause-choice strong{font-size:23px}
+ body.institution-app .cause-symbol{margin:13px 0;width:44px;height:44px;font-size:23px}
+}
+@media(max-width:430px){
+ body.institution-app .institution-topbar{gap:4px;padding-inline:11px!important}
+ body.institution-app .topbar-controls{gap:5px!important}
+ body.institution-app .topbar-action,body.institution-app .topbar-login{font-size:10px!important;padding-inline:9px!important}
+ body.institution-app .theme-toggle{width:33px;height:33px;flex-basis:33px}
+ body.institution-app .mobile-search-trigger{width:35px;height:35px;flex-basis:35px}
+ body.institution-app .cause-grid{grid-template-columns:1fr}
+ body.institution-app .cause-choice{min-height:0}
+}
+@media(max-width:360px){body.institution-app .topbar-login{display:none!important}}
+@media(prefers-reduced-motion:reduce){body.institution-app .cause-choice{transition:none}}

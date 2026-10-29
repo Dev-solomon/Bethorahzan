@@ -181,3 +181,36 @@ def test_v4_static_assets_and_responsive_spacing(app):
     for asset in ['hero-institution.webp', 'impact-network.webp', 'mission-landscape.webp',
                   'bethorahzan-official-emblem.png', 'bethorahzan-wordmark-display.png']:
         assert (static/'img'/asset).is_file()
+
+
+def test_mobile_header_and_giving_layout(client):
+    html=client.get('/giving').data.decode()
+    assert 'id="mobileSearchToggle"' in html
+    assert 'id="quickJump"' in html
+    assert 'id="jumpSearch" aria-label="Search website sections"' in html
+    assert 'Search website sections</label>' not in html
+    assert 'id="causeCollectionTitle"' in html
+    assert 'id="cause_id"' in html
+    for asset in ['/static/css/header-giving-fix.css', '/static/js/header-giving-fix.js']:
+        assert client.get(asset).status_code == 200
+
+
+def test_giving_causes_seeded_on_init_db_and_preserved(client, app):
+    from models import Cause
+    runner = app.test_cli_runner()
+    first=runner.invoke(args=['init-db'])
+    assert first.exit_code == 0, first.output
+    with app.app_context():
+        rows=Cause.query.order_by(Cause.id).all()
+        assert {c.name for c in rows} == {'Orphanages','Widows & Families','Food Relief','Community Outreach'}
+        rows[0].description='Edited by an administrator'
+        db.session.commit()
+    again=runner.invoke(args=['init-db'])
+    assert again.exit_code == 0, again.output
+    with app.app_context():
+        assert Cause.query.count() == 4
+        assert Cause.query.order_by(Cause.id).first().description == 'Edited by an administrator'
+    html = client.get('/giving').data.decode()
+    for name in ['Orphanages','Widows &amp; Families','Food Relief','Community Outreach']:
+        assert name in html
+    assert html.count('data-select-cause=') == 4
