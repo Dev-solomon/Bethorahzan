@@ -11,5 +11,11 @@ jobs:
         with:
           python-version: '3.12'
           cache: pip
-      - run: pip install -r requirements-dev.txt
-      - run: pytest -q
+      - name: Install application and test dependencies
+        run: python -m pip install -r requirements-dev.txt
+      - name: Initialize the database
+        run: python -m flask --app app init-db
+      - name: Load sample site data
+        run: python -m flask --app app seed
+      - name: Run application tests
+        run: python -m pytest -q
