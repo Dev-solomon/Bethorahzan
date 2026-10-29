@@ -65,6 +65,33 @@ def test_job_pricing_and_moderation(client,app,member):
     assert b'Build a community website' not in client.get('/opportunities').data
 
 
+
+def test_checkout_uses_standard_stripe_payments_for_all_payment_types(app, monkeypatch):
+    """Managed Payments can't process donations or the app's physical/Connect flows."""
+    from app import create_checkout
+    from stripe.checkout import Session
+
+    requests = []
+
+    def fake_create(**kwargs):
+        requests.append(kwargs)
+        return object()
+
+    monkeypatch.setattr(Session, 'create', fake_create)
+    with app.test_request_context('https://bethorahzan.example/giving'):
+        for kind, physical in (('donation', False), ('product', True), ('job', False)):
+            create_checkout(kind, 42, f'{kind} payment', 2500, 'donor@example.com', needs_shipping=physical)
+
+    assert len(requests) == 3
+    for params in requests:
+        assert params['managed_payments'] == {'enabled': False}
+        assert params['payment_method_types'] == ['card']
+        assert params['success_url'].startswith('https://')
+    assert 'shipping_address_collection' not in requests[0]
+    assert 'shipping_address_collection' in requests[1]
+    assert 'shipping_address_collection' not in requests[2]
+
+
 def test_stripe_unconfigured_prevents_giving(client,app):
     with app.app_context():
         from models import Cause
