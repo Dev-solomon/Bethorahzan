@@ -238,3 +238,49 @@ body.institution-app .boz-glow-card{--glow-x:50%;--glow-y:50%;}
   .boz-back-top{transition:none;}
   body.institution-app .info-card,body.institution-app .list-card,body.institution-app .admin-stat{transition:none;}
 }
+
+/* Individual gathering: show the uploaded event image at full clarity.
+   No institutional hero art, overlaid headings, filters or decorative marks. */
+body.institution-app .site-route-event_detail .event-detail-image {
+  width:100%;
+  margin:0;
+  padding:0;
+  background:#071521;
+  overflow:hidden;
+}
+body.institution-app .site-route-event_detail .event-detail-image img {
+  display:block;
+  width:100%;
+  height:auto;
+  max-height:780px;
+  margin:0 auto;
+  object-fit:contain;
+  object-position:center;
+  opacity:1;
+  filter:none;
+}
+body.institution-app .site-route-event_detail .event-detail-breadcrumb {
+  display:flex;
+  align-items:center;
+  flex-wrap:wrap;
+  gap:9px;
+  margin-bottom:23px;
+  font-size:12px;
+  color:#657684;
+}
+body.institution-app .site-route-event_detail .event-detail-breadcrumb a {
+  color:#a56643;
+  text-decoration:none;
+}
+body.institution-app .site-route-event_detail .event-detail-breadcrumb a:hover,
+body.institution-app .site-route-event_detail .event-detail-breadcrumb a:focus-visible {
+  text-decoration:underline;
+}
+body.institution-app .site-route-event_detail .event-detail-breadcrumb i {
+  font-size:10px;
+}
+@media (max-width:767.98px) {
+  body.institution-app .site-route-event_detail .event-detail-image img {
+    max-height:none;
+  }
+}
