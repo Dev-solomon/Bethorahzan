@@ -144,6 +144,9 @@ def create_checkout(kind, id_, title, amount_cents, customer_email, success_endp
         mode='payment', customer_email=customer_email,
         line_items=[{'price_data': {'currency': 'usd', 'unit_amount': amount_cents,
                        'product_data': {'name': title[:120]}}, 'quantity': 1}],
+        # Donations, physical goods and project funding use standard Stripe Checkout,
+        # not Managed Payments (which is for eligible digital products only).
+        managed_payments={'enabled': False},
         payment_method_types=['card'],
         client_reference_id=f'{kind}:{id_}',
         metadata={'kind':kind, 'local_id':str(id_)},
