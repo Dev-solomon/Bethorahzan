@@ -177,7 +177,7 @@ def test_v4_static_assets_and_responsive_spacing(app):
                       '.admin-shell', '.admin-sidebar', '.portal-nav',
                       '@media (max-width:767.98px)', '@media (max-width:420px)']:
         assert reference in css
-    assert 'document.createElement' in js and 'prefers-reduced-motion' in js
+    assert 'doc.createElement' in js and 'prefers-reduced-motion' in js
     for asset in ['hero-institution.webp', 'impact-network.webp', 'mission-landscape.webp',
                   'bethorahzan-official-emblem.png', 'bethorahzan-wordmark-display.png']:
         assert (static/'img'/asset).is_file()
