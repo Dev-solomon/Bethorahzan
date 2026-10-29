@@ -775,7 +775,20 @@ def register_routes(app):
 def register_cli(app):
     @app.cli.command('init-db')
     def init_db():
-        db.create_all();click.echo('Database tables initialized.')
+        db.create_all()
+        # Heroku invokes this during release. Provide default giving categories
+        # only when none exist; never override administrative edits or removals.
+        if db.session.query(Cause.id).first() is None:
+            for name, description, icon in [
+                ('Orphanages', 'Food, care and opportunities for children in vulnerable circumstances.', 'house-heart'),
+                ('Widows & Families', 'Practical assistance, compassion and dignity for widows and families.', 'people'),
+                ('Food Relief', 'Help communities facing severe food shortages and extreme poverty.', 'basket'),
+                ('Community Outreach', 'Support local teams serving urgent needs in their communities.', 'globe')
+            ]:
+                db.session.add(Cause(name=name, slug=slugify(name), description=description, icon=icon))
+            db.session.commit()
+            click.echo('Created the four initial giving causes.')
+        click.echo('Database tables initialized.')
 
     @app.cli.command('create-admin')
     @click.option('--email',prompt=True)
