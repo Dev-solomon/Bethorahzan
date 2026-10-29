@@ -24,7 +24,7 @@
 <div class="sidebar-scrim" id="sidebarScrim" aria-hidden="true"></div>
 <aside class="institution-sidebar" id="institutionSidebar" aria-label="Bethorahzan main navigation">
   <div class="institution-sidebar-inner">
-  <div class="sidebar-brand"><a href="{{ url_for('home') }}" aria-label="Bethorahzan home" class="sidebar-brand-link"><img class="sidebar-logo" src="{{ url_for('static',filename='img/bethorahzan-official-emblem.png') }}" alt="Official Bethorahzan emblem" width="92" height="92"><img class="sidebar-wordmark" src="{{ url_for('static',filename='img/bethorahzan-wordmark-display.png') }}" alt="Bethorahzan official name" width="188" height="94"></a><div class="brand-declaration">GROWTH IN THREE DIMENSIONS</div></div>
+  <div class="sidebar-brand"><a href="{{ url_for('home') }}" aria-label="Bethorahzan home" class="sidebar-brand-link"><img class="sidebar-logo" src="{{ url_for('static',filename='img/bethorahzan-official-emblem.png') }}" alt="Official Bethorahzan emblem" width="92" height="92"></a><div class="brand-declaration">GROWTH IN THREE DIMENSIONS</div></div>
   <div class="sidebar-label">THE COMMONWEALTH <span>01 / 03</span></div>
   <nav class="sidebar-navigation" aria-label="Main menu">
     <a href="{{ url_for('home') }}" class="sidebar-item {{ 'is-active' if request.endpoint=='home' else '' }}" {% if request.endpoint=='home' %}aria-current="page"{% endif %}><i class="bi bi-house-door"></i><span>Overview</span><i class="bi bi-arrow-up-right item-tail"></i></a>
