@@ -100,5 +100,12 @@ body.theme-light .institution-topbar{background:rgba(250,247,239,.98);color:#192
     overflow-y:auto;
     overscroll-behavior:contain;
     -webkit-overflow-scrolling:touch;
+    /* Leave room to reach the final navigation card and footer on phones. */
+    padding-bottom:max(16px, env(safe-area-inset-bottom));
+  }
+  /* Prevent the promotional card from collapsing inside the flex column. */
+  body.institution-app .institution-sidebar-inner > .sidebar-promo,
+  body.institution-app .institution-sidebar-inner > .sidebar-copyright {
+    flex-shrink:0;
   }
 }
