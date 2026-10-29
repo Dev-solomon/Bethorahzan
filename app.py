@@ -118,6 +118,18 @@ def safe_next(target):
     return target if not test.scheme and not test.netloc and target.startswith('/') and not target.startswith('//') else None
 
 
+def safe_resource_url(value):
+    """Allow only HTTPS access links for paid digital library resources."""
+    value = (value or '').strip()
+    if not value:
+        return ''
+    try:
+        target = urlparse(value)
+        return value if target.scheme == 'https' and target.hostname and not target.username and not target.password else ''
+    except (TypeError, ValueError):
+        return ''
+
+
 def admin_required(view):
     @wraps(view)
     @login_required
@@ -366,6 +378,24 @@ def register_routes(app):
            orders=orders,
            jobs=Job.query.filter_by(owner_id=current_user.id).order_by(Job.created_at.desc()).all(),
            applications=JobApplication.query.filter_by(user_id=current_user.id).order_by(JobApplication.created_at.desc()).all())
+
+    @app.get('/library/<int:product_id>/open')
+    @login_required
+    def open_purchased_resource(product_id):
+        """Only the purchasing member may receive a paid digital resource link."""
+        product = db.get_or_404(Product, product_id)
+        if product.fulfillment_type != 'digital' or product.kind not in ('book', 'course'):
+            abort(404)
+        owned = Purchase.query.filter_by(
+            user_id=current_user.id, product_id=product_id, status='paid'
+        ).first()
+        if not owned:
+            abort(403)
+        access_url = safe_resource_url(product.access_url)
+        if not access_url:
+            flash('Your payment is confirmed, but the access link has not been published. Please contact Bethorahzan.', 'warning')
+            return redirect(url_for('member_dashboard'))
+        return redirect(access_url, code=302)
 
     @app.route('/portal/profile',methods=['GET','POST'])
     @login_required
@@ -703,6 +733,8 @@ def register_routes(app):
                     record.price_cents=money_to_cents(request.form.get('price'),100,2_000_000)
                     record.image_url=form_value('image_url',500)
                     record.access_url=form_value('access_url',500)
+                    if record.access_url and not safe_resource_url(record.access_url):
+                        raise ValueError('Enter a valid HTTPS link to the digital book or course.')
                     record.inventory=int(request.form['inventory']) if request.form.get('inventory') else None
                     if record.inventory is not None and record.inventory<0:raise ValueError('Inventory must be nonnegative.')
                     record.active=bool(request.form.get('active'))
