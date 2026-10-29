@@ -91,7 +91,7 @@ def test_institutional_navigation_and_official_branding(client):
     assert 'id="sidebarToggle"' in html
     assert 'id="jumpSearch"' in html
     assert 'bethorahzan-official-emblem.png' in html
-    assert 'bethorahzan-official-wordmark.png' in html
+    assert 'bethorahzan-wordmark-display.png' in html
     for asset in ['/static/css/institutional-v2.css',
                   '/static/js/institutional-v2.js',
                   '/static/img/bethorahzan-official-emblem.png',
