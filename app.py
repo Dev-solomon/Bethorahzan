@@ -1,6 +1,7 @@
 """Bethorahzan | Flask community platform.
 
-Payments only switch to 'paid' from Stripe's signed webhooks. Job funding is a
+Payments are verified against Stripe through signed webhooks, with an authenticated
+member-portal reconciliation fallback for pending book orders. Job funding is a
 Stripe Connect marketplace flow, NOT a regulated escrow service. Before live
 launch obtain Stripe approval, legal review, charity/tax review and a payout policy.
 """
@@ -159,6 +160,52 @@ def create_checkout(kind, id_, title, amount_cents, customer_email, success_endp
     return session
 
 
+def reconcile_pending_purchase(purchase):
+    """Confirm a member's pending purchase against Stripe's own Checkout API.
+
+    The caller must already have authenticated and checked purchase ownership.
+    Never treat a browser success URL or a locally pending record as proof of payment.
+    """
+    if purchase.status != 'pending' or not purchase.stripe_session_id:
+        return False
+    if not current_app.config['STRIPE_SECRET_KEY']:
+        return False
+    stripe.api_key = current_app.config['STRIPE_SECRET_KEY']
+    try:
+        session = stripe.checkout.Session.retrieve(purchase.stripe_session_id)
+    except stripe.StripeError:
+        current_app.logger.exception('Stripe reconciliation failed for purchase %s', purchase.id)
+        return False
+
+    metadata = session.get('metadata') or {}
+    if not (
+        session.get('id') == purchase.stripe_session_id
+        and session.get('mode') == 'payment'
+        and session.get('status') == 'complete'
+        and session.get('payment_status') == 'paid'
+        and session.get('currency') == 'usd'
+        and session.get('amount_total') == purchase.amount_cents
+        and metadata.get('kind') == 'product'
+        and str(metadata.get('local_id')) == str(purchase.id)
+        and session.get('client_reference_id') == f'product:{purchase.id}'
+    ):
+        current_app.logger.warning('Unconfirmed or mismatched Stripe session for purchase %s', purchase.id)
+        return False
+
+    purchase.status = 'paid'
+    purchase.stripe_payment_intent = session.get('payment_intent') or ''
+    if purchase.product.fulfillment_type == 'physical':
+        purchase.shipping_details = json.dumps(
+            session.get('shipping_details')
+            or (session.get('collected_information') or {}).get('shipping_details')
+            or session.get('customer_details') or {}, ensure_ascii=False
+        )[:3000]
+    if purchase.product.inventory is not None and purchase.product.inventory > 0:
+        purchase.product.inventory -= 1
+    db.session.commit()
+    return True
+
+
 @login_manager.user_loader
 def load_user(user_id):
     try:
@@ -310,8 +357,13 @@ def register_routes(app):
     @app.route('/portal')
     @login_required
     def member_dashboard():
+        orders = Purchase.query.filter_by(user_id=current_user.id).order_by(Purchase.created_at.desc()).limit(6).all()
+        # Recover verified payments when a Checkout webhook was missed or delayed.
+        for order in orders:
+            if order.status == 'pending' and order.stripe_session_id:
+                reconcile_pending_purchase(order)
         return render_template('portal.html', bookings=Appointment.query.filter_by(user_id=current_user.id).order_by(Appointment.created_at.desc()).limit(6).all(),
-           orders=Purchase.query.filter_by(user_id=current_user.id).order_by(Purchase.created_at.desc()).limit(6).all(),
+           orders=orders,
            jobs=Job.query.filter_by(owner_id=current_user.id).order_by(Job.created_at.desc()).all(),
            applications=JobApplication.query.filter_by(user_id=current_user.id).order_by(JobApplication.created_at.desc()).all())
 
@@ -520,7 +572,13 @@ def register_routes(app):
 
     @app.route('/payment/result')
     def payment_result():
-        return render_template('message.html',title='Thank you',message='Stripe is processing your payment. Your order, gift or project funding will update after payment is verified. View your portal for status.')
+        session_id = request.args.get('session_id', '')
+        if current_user.is_authenticated and session_id.startswith('cs_') and len(session_id) <= 255:
+            purchase = Purchase.query.filter_by(user_id=current_user.id, stripe_session_id=session_id).first()
+            if purchase and (purchase.status == 'paid' or reconcile_pending_purchase(purchase)):
+                return render_template('message.html', title='Payment confirmed',
+                    message='Stripe has confirmed your purchase. Your order now appears as paid in your member portal.')
+        return render_template('message.html',title='Thank you',message='Your checkout is complete or still processing. Once Stripe confirms payment, your order will update in your member portal. If it remains pending, open your portal to check its status.')
 
     @app.route('/payment/cancel')
     def payment_cancel():
