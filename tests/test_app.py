@@ -137,3 +137,47 @@ def test_official_heritage_brand_and_hero_art(client):
     assert '@media (max-width:360px)' in css
     assert b'hero-institution.webp' in page.data
 
+
+
+def test_institutional_v4_is_loaded_on_public_and_member_pages(client, member):
+    """All page templates extend the shared full-bleed, tech-inspired shell."""
+    paths = ['/', '/about', '/events', '/teachings', '/impact', '/giving',
+             '/shop', '/opportunities', '/contact', '/login', '/join',
+             '/privacy', '/terms']
+    for path in paths:
+        res = client.get(path)
+        assert res.status_code == 200, path
+        html = res.get_data(as_text=True)
+        assert 'css/institutional-v4.css' in html, path
+        assert 'js/institutional-v4.js' in html, path
+        assert '<main id="main-content" class="site-route-' in html, path
+        assert 'id="institutionSidebar"' in html, path
+        assert 'href="/events"' in html and 'href="/giving"' in html
+    authenticate(client, 'member@example.com')
+    html = client.get('/portal').get_data(as_text=True)
+    assert 'site-route-member_dashboard' in html
+    assert 'css/institutional-v4.css' in html
+
+
+def test_admin_v4_sidebar_links_and_active_state(client, admin):
+    authenticate(client,'admin@example.com')
+    html=client.get('/admin').get_data(as_text=True)
+    assert 'class="admin-shell"' in html
+    assert 'css/institutional-v4.css' in html
+    assert 'aria-current="page"' in html
+    assert 'href="/admin/members"' in html
+
+
+def test_v4_static_assets_and_responsive_spacing(app):
+    from pathlib import Path
+    static=Path(app.static_folder)
+    css=(static/'css'/'institutional-v4.css').read_text()
+    js=(static/'js'/'institutional-v4.js').read_text()
+    for reference in ['.site-container', '.page-hero', '.inner-section',
+                      '.admin-shell', '.admin-sidebar', '.portal-nav',
+                      '@media (max-width:767.98px)', '@media (max-width:420px)']:
+        assert reference in css
+    assert 'document.createElement' in js and 'prefers-reduced-motion' in js
+    for asset in ['hero-institution.webp', 'impact-network.webp', 'mission-landscape.webp',
+                  'bethorahzan-official-emblem.png', 'bethorahzan-wordmark-display.png']:
+        assert (static/'img'/asset).is_file()
