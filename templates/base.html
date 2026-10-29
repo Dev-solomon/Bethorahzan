@@ -2,42 +2,59 @@
 <html lang="en">
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="description" content="Bethorahzan — Growth in 3 Dimensions. A Christ-governed community growing in body, soul and spirit.">
-<title>{% block title %}Bethorahzan{% endblock %} · Growth in 3 Dimensions</title>
-<link rel="icon" href="{{ url_for('static',filename='img/emblem-clean.png') }}">
+<meta name="description" content="Bethorahzan — Growth in 3 Dimensions. A Christ-governed community committed to the body, soul, spirit and compassionate service.">
+<meta name="theme-color" content="#091826">
+<title>{% block title %}Bethorahzan{% endblock %} | Growth in 3 Dimensions</title>
+<link rel="icon" href="{{ url_for('static',filename='img/bethorahzan-official-emblem.png') }}">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&family=Playfair+Display:wght@400;500;600;700&display=swap" rel="stylesheet">
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT4lP8K4D4+L1Q/0Y5hR+" crossorigin="anonymous">
 <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
 <link href="{{ url_for('static',filename='css/style.css') }}" rel="stylesheet">
+<link href="{{ url_for('static',filename='css/institutional-v2.css') }}" rel="stylesheet">
 {% block head %}{% endblock %}
 </head>
-<body class="{% block bodyclass %}{% endblock %}">
-<div class="top-strip"><span class="top-strip-line"></span><span>AN INSTITUTION OF FAITH · A MOVEMENT OF SERVICE</span><span class="top-strip-line"></span></div>
-<nav class="navbar navbar-expand-xl main-navbar" data-bs-theme="light"><div class="container-fluid site-container">
-<a class="navbar-brand brand" href="{{ url_for('home') }}"><img src="{{ url_for('static',filename='img/emblem-clean.png') }}" alt="Bethorahzan emblem" class="brand-mark"><span class="brand-copy"><span>BETHORAHZAN</span><small>GROWTH IN 3 DIMENSIONS</small></span></a>
-<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#siteNav" aria-controls="siteNav" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
-<div class="collapse navbar-collapse" id="siteNav"><ul class="navbar-nav mx-auto align-items-xl-center nav-main">
-<li class="nav-item"><a class="nav-link" href="{{ url_for('about') }}">The Institution</a></li>
-<li class="nav-item"><a class="nav-link" href="{{ url_for('events') }}">Gatherings</a></li>
-<li class="nav-item"><a class="nav-link" href="{{ url_for('teachings') }}">Teachings</a></li>
-<li class="nav-item"><a class="nav-link" href="{{ url_for('impact') }}">Our Impact</a></li>
-<li class="nav-item"><a class="nav-link" href="{{ url_for('opportunities') }}">Opportunities</a></li>
-<li class="nav-item"><a class="nav-link" href="{{ url_for('shop') }}">The Library</a></li>
-<li class="nav-item"><a class="nav-link" href="{{ url_for('giving') }}">Giving</a></li>
-</ul><div class="d-flex align-items-center nav-actions flex-wrap gap-2 py-2 py-xl-0">
-{% if current_user.is_authenticated %}<a href="{{ url_for('member_dashboard') }}" class="nav-account"><i class="bi bi-person-circle"></i> My Portal</a>
-{% if current_user.role=='admin' %}<a href="{{ url_for('admin_dashboard') }}" class="nav-account"><i class="bi bi-grid"></i> Admin</a>{% endif %}
-<form action="{{ url_for('logout') }}" method="post"><input type="hidden" name="csrf_token" value="{{ csrf_token() }}"><button class="nav-signout" type="submit" aria-label="Sign out"><i class="bi bi-box-arrow-right"></i></button></form>
-{% else %}<a href="{{ url_for('login') }}" class="nav-account">Member Login</a><a href="{{ url_for('join') }}" class="btn btn-copper btn-small">Become a Member <i class="bi bi-arrow-up-right"></i></a>{% endif %}
-</div></div></div></nav>
-{% with messages=get_flashed_messages(with_categories=true) %}{% if messages %}<div class="container-fluid site-container flash-container">{% for category,message in messages %}<div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">{{ message }}<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div>{% endfor %}</div>{% endif %}{% endwith %}
-<main>{% block content %}{% endblock %}</main>
-<footer class="site-footer"><div class="site-container container-fluid"><div class="footer-grid"><div class="footer-intro"><div class="footer-crest"><img src="{{ url_for('static',filename='img/emblem-clean.png') }}" alt="Bethorahzan"></div><span class="eyebrow eyebrow-light">BETHORAHZAN · ESTABLISHED IN FAITH</span><h2>To grow is to<br><em>serve.</em></h2><p>A Christ-governed community committed to the growth of the whole person and the dignity of every life.</p></div>
-<div><h6>DISCOVER</h6><a href="{{ url_for('about') }}">Our story</a><a href="{{ url_for('impact') }}">Areas of impact</a><a href="{{ url_for('events') }}">Events & gatherings</a><a href="{{ url_for('teachings') }}">Teachings & messages</a><a href="{{ url_for('opportunities') }}">Work opportunities</a></div>
-<div><h6>ENGAGE</h6><a href="{{ url_for('join') }}">Become a member</a><a href="{{ url_for('appointments') }}">Request a meeting</a><a href="{{ url_for('shop') }}">Books & courses</a><a href="{{ url_for('giving') }}">Give to a cause</a></div>
-<div><h6>CONNECT</h6><a href="{{ url_for('contact') }}">Contact the office</a><a href="https://youtube.com/@bethorahzan" rel="noopener" target="_blank">YouTube <i class="bi bi-arrow-up-right"></i></a><a href="{{ url_for('privacy') }}">Privacy policy</a><a href="{{ url_for('terms') }}">Terms of use</a><div class="footer-mini-rule"></div><small>THE BODY · THE SOUL · THE SPIRIT</small></div></div>
-<div class="footer-bottom"><span>© {{ brand_year }} BETHORAHZAN. ALL RIGHTS RESERVED.</span><span>GOVERNED BY THE PRINCIPLES OF CHRIST <i class="bi bi-cross"></i></span><span>GROWTH IN 3 DIMENSIONS</span></div></div></footer>
+<body class="institution-app {% block bodyclass %}{% endblock %}">
+<a href="#main-content" class="skip-link">Skip to main content</a>
+<div class="app-shell" id="appShell">
+<div class="sidebar-scrim" id="sidebarScrim" aria-hidden="true"></div>
+<aside class="institution-sidebar" id="institutionSidebar" aria-label="Bethorahzan main navigation">
+  <div class="sidebar-brand"><a href="{{ url_for('home') }}" aria-label="Bethorahzan home" class="sidebar-brand-link"><img class="sidebar-logo" src="{{ url_for('static',filename='img/bethorahzan-official-emblem.png') }}" alt="Official Bethorahzan emblem" width="92" height="92"><img class="sidebar-wordmark" src="{{ url_for('static',filename='img/bethorahzan-official-wordmark.png') }}" alt="Bethorahzan official name" width="188" height="94"></a><div class="brand-declaration">GROWTH IN THREE DIMENSIONS</div></div>
+  <div class="sidebar-label">THE COMMONWEALTH <span>01 / 03</span></div>
+  <nav class="sidebar-navigation" aria-label="Main menu">
+    <a href="{{ url_for('home') }}" class="sidebar-item {{ 'is-active' if request.endpoint=='home' else '' }}" {% if request.endpoint=='home' %}aria-current="page"{% endif %}><i class="bi bi-house-door"></i><span>Overview</span><i class="bi bi-arrow-up-right item-tail"></i></a>
+    <a href="{{ url_for('about') }}" class="sidebar-item {{ 'is-active' if request.endpoint=='about' else '' }}" {% if request.endpoint=='about' %}aria-current="page"{% endif %}><i class="bi bi-bank"></i><span>The Institution</span></a>
+    <a href="{{ url_for('events') }}" class="sidebar-item {{ 'is-active' if request.endpoint in ['events','event_detail'] else '' }}" {% if request.endpoint in ['events','event_detail'] %}aria-current="page"{% endif %}><i class="bi bi-calendar2-week"></i><span>Gatherings & Events</span></a>
+    <a href="{{ url_for('teachings') }}" class="sidebar-item {{ 'is-active' if request.endpoint in ['teachings','teaching_detail'] else '' }}" {% if request.endpoint in ['teachings','teaching_detail'] %}aria-current="page"{% endif %}><i class="bi bi-journal-bookmark"></i><span>Teachings</span></a>
+    <a href="{{ url_for('impact') }}" class="sidebar-item {{ 'is-active' if request.endpoint=='impact' else '' }}" {% if request.endpoint=='impact' %}aria-current="page"{% endif %}><i class="bi bi-globe2"></i><span>Mission & Impact</span></a>
+    <a href="{{ url_for('appointments') }}" class="sidebar-item {{ 'is-active' if request.endpoint=='appointments' else '' }}" {% if request.endpoint=='appointments' %}aria-current="page"{% endif %}><i class="bi bi-chat-heart"></i><span>Care & Appointments</span></a>
+    <a href="{{ url_for('opportunities') }}" class="sidebar-item {{ 'is-active' if request.endpoint in ['opportunities','post_job','job_detail'] else '' }}" {% if request.endpoint in ['opportunities','post_job','job_detail'] %}aria-current="page"{% endif %}><i class="bi bi-briefcase"></i><span>Work Opportunities</span></a>
+    <a href="{{ url_for('shop') }}" class="sidebar-item {{ 'is-active' if request.endpoint in ['shop','product_detail'] else '' }}" {% if request.endpoint in ['shop','product_detail'] %}aria-current="page"{% endif %}><i class="bi bi-bag"></i><span>Books & Courses</span></a>
+    <a href="{{ url_for('giving') }}" class="sidebar-item {{ 'is-active' if request.endpoint=='giving' else '' }}" {% if request.endpoint=='giving' %}aria-current="page"{% endif %}><i class="bi bi-heart"></i><span>Giving</span></a>
+    <a href="{{ url_for('contact') }}" class="sidebar-item {{ 'is-active' if request.endpoint=='contact' else '' }}" {% if request.endpoint=='contact' %}aria-current="page"{% endif %}><i class="bi bi-envelope-paper"></i><span>Correspondence</span></a>
+  </nav>
+  <div class="sidebar-label sidebar-label-office">OFFICE & MEMBERSHIP <span>02 / 03</span></div>
+  <nav class="sidebar-navigation sidebar-office" aria-label="Member links">
+    {% if current_user.is_authenticated %}<a class="sidebar-item {{ 'is-active' if request.endpoint in ['member_dashboard','profile'] else '' }}" href="{{ url_for('member_dashboard') }}"><i class="bi bi-person-vcard"></i><span>My Member Portal</span></a>
+    {% if current_user.role == 'admin' %}<a class="sidebar-item {{ 'is-active' if request.endpoint and request.endpoint.startswith('admin_') else '' }}" href="{{ url_for('admin_dashboard') }}"><i class="bi bi-shield-lock"></i><span>Administration</span></a>{% endif %}<form action="{{ url_for('logout') }}" method="post" class="sidebar-logout-form"><input type="hidden" name="csrf_token" value="{{ csrf_token() }}"><button class="sidebar-item sidebar-logout" type="submit"><i class="bi bi-box-arrow-right"></i><span>Sign Out</span></button></form>
+    {% else %}<a class="sidebar-item" href="{{ url_for('login') }}"><i class="bi bi-person-check"></i><span>Member Sign In</span></a>{% endif %}
+  </nav>
+  <div class="sidebar-promo"><span class="sidebar-promo-top"><i class="bi bi-stars"></i> A PLACE TO BELONG</span><h3>Grow with<br><em>purpose.</em></h3><p>Faith. Wisdom. Service. A shared vision for the whole person.</p><a href="{{ url_for('member_dashboard') if current_user.is_authenticated else url_for('join') }}">{{ 'Your portal' if current_user.is_authenticated else 'Become a member' }} <i class="bi bi-arrow-up-right"></i></a></div>
+  <div class="sidebar-copyright">BETHORAHZAN · © {{ brand_year }}<span>BODY · SOUL · SPIRIT</span></div>
+</aside>
+<div class="institution-content" id="institutionContent">
+  <header class="institution-topbar">
+    <div class="topbar-leading"><button type="button" class="sidebar-toggle" id="sidebarToggle" aria-label="Toggle navigation" aria-controls="institutionSidebar" aria-expanded="false"><i class="bi bi-list"></i></button><div class="topbar-location"><span class="topbar-mono">BETHORAHZAN <i class="bi bi-chevron-right"></i></span><span class="topbar-section">{% block topbar_section %}The Commonwealth{% endblock %}</span></div></div>
+    <div class="topbar-controls"><div class="quick-jump" id="quickJump"><label for="jumpSearch" class="visually-hidden">Search website sections</label><i class="bi bi-search" aria-hidden="true"></i><input type="search" id="jumpSearch" autocomplete="off" placeholder="Find a page or section…" aria-controls="jumpResults" aria-expanded="false"><kbd>/</kbd><div class="jump-results" id="jumpResults" role="listbox" hidden></div></div><button class="theme-toggle" id="themeToggle" type="button" aria-label="Toggle appearance" title="Toggle appearance"><i class="bi bi-sun"></i></button>{% if current_user.is_authenticated %}<a class="topbar-login" href="{{ url_for('member_dashboard') }}"><i class="bi bi-person-circle"></i><span>My Portal</span></a>{% if current_user.role=='admin' %}<a class="topbar-action topbar-admin" href="{{ url_for('admin_dashboard') }}">Admin <i class="bi bi-arrow-up-right"></i></a>{% endif %}{% else %}<a class="topbar-login" href="{{ url_for('login') }}">Sign In</a><a class="topbar-action" href="{{ url_for('join') }}">Join Community <i class="bi bi-arrow-up-right"></i></a>{% endif %}</div>
+  </header>
+  {% with messages=get_flashed_messages(with_categories=true) %}{% if messages %}<div class="container-fluid site-container flash-container" role="status">{% for category,message in messages %}<div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">{{ message }}<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div>{% endfor %}</div>{% endif %}{% endwith %}
+  <main id="main-content">{% block content %}{% endblock %}</main>
+  <footer class="site-footer"><div class="site-container container-fluid"><div class="footer-grid"><div class="footer-intro"><div class="footer-crest"><img src="{{ url_for('static',filename='img/bethorahzan-official-emblem.png') }}" alt="Official Bethorahzan emblem" loading="lazy"></div><span class="eyebrow eyebrow-light">BETHORAHZAN · GROWTH IN 3 DIMENSIONS</span><h2>To grow is to<br><em>serve.</em></h2><p>A community governed by the principles of Christ, devoted to faith, knowledge and practical care.</p></div><div><h6>DISCOVER</h6><a href="{{ url_for('about') }}">Our institution</a><a href="{{ url_for('impact') }}">The mandate</a><a href="{{ url_for('events') }}">Gatherings & events</a><a href="{{ url_for('teachings') }}">Teachings</a></div><div><h6>PARTICIPATE</h6><a href="{{ url_for('join') }}">Membership</a><a href="{{ url_for('appointments') }}">Request an appointment</a><a href="{{ url_for('opportunities') }}">Work opportunities</a><a href="{{ url_for('shop') }}">Books & courses</a><a href="{{ url_for('giving') }}">Support a cause</a></div><div><h6>CONTACT & CARE</h6><a href="{{ url_for('contact') }}">Correspondence</a><a href="https://youtube.com/@bethorahzan" rel="noopener noreferrer" target="_blank">Official YouTube <i class="bi bi-box-arrow-up-right"></i></a><a href="{{ url_for('privacy') }}">Privacy</a><a href="{{ url_for('terms') }}">Terms of use</a><div class="footer-mini-rule"></div><small>BODY · SOUL · SPIRIT</small></div></div><div class="footer-bottom"><span>© {{ brand_year }} BETHORAHZAN</span><span>THE PRINCIPLES OF CHRIST · LUKE 2:52</span><span>GROWTH IN THREE DIMENSIONS</span></div></div></footer>
+</div></div>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 <script src="{{ url_for('static',filename='js/site.js') }}"></script>
+<script src="{{ url_for('static',filename='js/institutional-v2.js') }}" defer></script>
+<script id="site-jump-pages" type="application/json">{{ [ {'label':'Overview','href':url_for('home'),'icon':'house-door'}, {'label':'The Institution','href':url_for('about'),'icon':'bank'}, {'label':'Gatherings & Events','href':url_for('events'),'icon':'calendar-week'}, {'label':'Teachings','href':url_for('teachings'),'icon':'journal-bookmark'}, {'label':'Mission & Impact','href':url_for('impact'),'icon':'globe'}, {'label':'Care & Appointments','href':url_for('appointments'),'icon':'chat-heart'}, {'label':'Work Opportunities','href':url_for('opportunities'),'icon':'briefcase'}, {'label':'Books & Courses','href':url_for('shop'),'icon':'bag'}, {'label':'Giving','href':url_for('giving'),'icon':'heart'}, {'label':'Correspondence','href':url_for('contact'),'icon':'envelope'}, {'label':'Membership','href':url_for('join'),'icon':'person-plus'}, {'label':'Member Portal','href':url_for('member_dashboard'),'icon':'person-vcard'} ]|tojson }}</script>
 {% block scripts %}{% endblock %}
 </body></html>

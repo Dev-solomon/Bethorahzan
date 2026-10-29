@@ -81,6 +81,35 @@ def test_untrusted_embed_rejected():
     assert not youtube_embed('javascript:alert(1)')
 
 
+def test_institutional_navigation_and_official_branding(client):
+    response=client.get('/')
+    assert response.status_code==200
+    html=response.data.decode()
+    for endpoint in ['/about','/events','/teachings','/impact','/appointments','/opportunities','/shop','/giving','/contact','/join']:
+        assert f'href="{endpoint}"' in html
+    assert 'id="institutionSidebar"' in html
+    assert 'id="sidebarToggle"' in html
+    assert 'id="jumpSearch"' in html
+    assert 'bethorahzan-official-emblem.png' in html
+    assert 'bethorahzan-official-wordmark.png' in html
+    for asset in ['/static/css/institutional-v2.css',
+                  '/static/js/institutional-v2.js',
+                  '/static/img/bethorahzan-official-emblem.png',
+                  '/static/img/bethorahzan-official-wordmark.png']:
+        assert client.get(asset).status_code == 200, asset
+
+
+def test_admin_navigation_retained(client, admin):
+    from conftest import authenticate
+    authenticate(client, 'admin@example.com')
+    response=client.get('/admin')
+    assert response.status_code==200
+    html=response.data.decode()
+    assert 'OFFICE OF ADMINISTRATION' in html
+    assert 'Sign Out' in html
+    assert 'href="/admin"' in html
+
+
 def test_heroku_postgres_url_uses_installed_driver():
     from app import normalized_database_url
     assert normalized_database_url('postgres://u:p@db.example:5432/bethorahzan') == 'postgresql+psycopg://u:p@db.example:5432/bethorahzan'
