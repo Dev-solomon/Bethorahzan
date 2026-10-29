@@ -79,3 +79,10 @@ def test_untrusted_embed_rejected():
     assert youtube_embed('https://www.youtube.com/watch?v=abcdefghijk')=='https://www.youtube-nocookie.com/embed/abcdefghijk'
     assert not youtube_embed('https://evil.example/embed/abcdefghijk')
     assert not youtube_embed('javascript:alert(1)')
+
+
+def test_heroku_postgres_url_uses_installed_driver():
+    from app import normalized_database_url
+    assert normalized_database_url('postgres://u:p@db.example:5432/bethorahzan') == 'postgresql+psycopg://u:p@db.example:5432/bethorahzan'
+    assert normalized_database_url('postgresql://u:p@db.example/bethorahzan') == 'postgresql+psycopg://u:p@db.example/bethorahzan'
+    assert normalized_database_url('sqlite:///bethorahzan.db') == 'sqlite:///bethorahzan.db'
