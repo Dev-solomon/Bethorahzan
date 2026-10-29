@@ -339,3 +339,63 @@ def test_stripe_reconciliation_rejects_mismatched_or_unpaid_sessions(client, app
     client.get('/portal')
     with app.app_context():
         assert db.session.get(Purchase, purchase_id).status == 'pending'
+
+def test_paid_digital_books_open_only_for_verified_owner(client, app, member):
+    from models import Product, Purchase
+
+    with app.app_context():
+        book = Product(title='Blood & Water', slug='blood-and-water-access', kind='book',
+                       fulfillment_type='digital', description='Book', price_cents=2100,
+                       access_url='https://files.example.org/blood-water.pdf')
+        db.session.add(book)
+        db.session.flush()
+        order = Purchase(user_id=member, product_id=book.id, amount_cents=2100, status='pending')
+        db.session.add(order)
+        db.session.commit()
+        book_id, order_id = book.id, order.id
+
+    assert client.get(f'/library/{book_id}/open').status_code in (302, 401)
+    authenticate(client, 'member@example.com')
+    assert client.get(f'/library/{book_id}/open').status_code == 403
+    assert b'Open Book' not in client.get('/portal').data
+
+    with app.app_context():
+        db.session.get(Purchase, order_id).status = 'paid'
+        db.session.commit()
+
+    portal = client.get('/portal')
+    assert b'Open Book' in portal.data
+    assert f'/library/{book_id}/open'.encode() in portal.data
+    opened = client.get(f'/library/{book_id}/open')
+    assert opened.status_code == 302
+    assert opened.headers['Location'] == 'https://files.example.org/blood-water.pdf'
+
+    client.post('/logout')
+    assert client.get(f'/library/{book_id}/open').status_code == 302
+
+
+def test_book_link_waits_for_admin_and_rejects_invalid_or_physical_access(client, app, member):
+    from models import Product, Purchase
+
+    with app.app_context():
+        book = Product(title='Not Yet Published', slug='book-awaiting-access', kind='book',
+                       fulfillment_type='digital', description='Book', price_cents=1800)
+        unsafe = Product(title='Invalid URL', slug='invalid-resource-url', kind='book',
+                         fulfillment_type='digital', description='Book', price_cents=1800,
+                         access_url='javascript:alert(1)')
+        physical = Product(title='Printed Book', slug='physical-book', kind='book',
+                           fulfillment_type='physical', description='Book', price_cents=1800,
+                           access_url='https://files.example.org/printed.pdf')
+        db.session.add_all([book, unsafe, physical])
+        db.session.flush()
+        book_id, unsafe_id, physical_id = book.id, unsafe.id, physical.id
+        db.session.add_all([Purchase(user_id=member, product_id=product_id, amount_cents=1800, status='paid')
+                            for product_id in (book_id, unsafe_id, physical_id)])
+        db.session.commit()
+
+    authenticate(client, 'member@example.com')
+    portal = client.get('/portal')
+    assert b'Your access link has not been published yet' in portal.data
+    assert client.get(f'/library/{book_id}/open', follow_redirects=True).status_code == 200
+    assert b'Your payment is confirmed' in client.get(f'/library/{unsafe_id}/open', follow_redirects=True).data
+    assert client.get(f'/library/{physical_id}/open').status_code == 404
