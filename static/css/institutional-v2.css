@@ -53,3 +53,52 @@ body.theme-light .institution-topbar{background:rgba(250,247,239,.98);color:#192
 @media(prefers-reduced-motion:reduce){*,*:before,*:after{animation-duration:.01ms!important;animation-iteration-count:1!important;scroll-behavior:auto!important;transition-duration:.01ms!important}.js-motion .reveal{opacity:1;transform:none}}
 
 .sidebar-logout-form{margin:0}.sidebar-logout{width:100%;background:transparent;text-align:left;cursor:pointer}.jump-option.is-focused{background:#e7ded1;color:#9b4b31}
+
+
+/* DESKTOP FULL-HEIGHT SIDEBAR: the rail background stretches the entire page.
+   Its contents scroll inside a sticky viewport-height panel on desktop. */
+@media (min-width:1151px) {
+  body.institution-app .app-shell { align-items:stretch; }
+  body.institution-app .institution-sidebar {
+    position:relative;
+    top:auto;
+    height:auto;
+    min-height:100vh;
+    align-self:stretch;
+    overflow:visible;
+    flex-shrink:0;
+  }
+  body.institution-app .institution-sidebar-inner {
+    position:sticky;
+    top:0;
+    display:flex;
+    flex-direction:column;
+    height:100vh;
+    height:100dvh;
+    overflow-x:hidden;
+    overflow-y:auto;
+    overscroll-behavior:contain;
+    scrollbar-width:thin;
+    scrollbar-color:#395063 transparent;
+  }
+}
+/* Keep the original full-screen, slide-out navigation on smaller displays. */
+@media (max-width:1150px) {
+  body.institution-app .institution-sidebar {
+    position:fixed;
+    top:0;
+    height:100vh;
+    height:100dvh;
+    min-height:0;
+    overflow:hidden;
+  }
+  body.institution-app .institution-sidebar-inner {
+    display:flex;
+    flex-direction:column;
+    height:100%;
+    overflow-x:hidden;
+    overflow-y:auto;
+    overscroll-behavior:contain;
+    -webkit-overflow-scrolling:touch;
+  }
+}

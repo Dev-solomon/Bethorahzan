@@ -214,3 +214,19 @@ def test_giving_causes_seeded_on_init_db_and_preserved(client, app):
     for name in ['Orphanages','Widows &amp; Families','Food Relief','Community Outreach']:
         assert name in html
     assert html.count('data-select-cause=') == 4
+
+
+def test_sidebar_full_page_height_on_desktop_only(client, app):
+    """A full-height sidebar rail with sticky scrolling contents and a mobile drawer."""
+    from pathlib import Path
+    html = client.get('/').get_data(as_text=True)
+    assert '<div class="institution-sidebar-inner">' in html
+    assert html.index('<aside class="institution-sidebar"') < html.index('institution-sidebar-inner')
+    assert html.index('institution-sidebar-inner') < html.index('</aside>')
+    css = (Path(app.static_folder) / 'css' / 'institutional-v2.css').read_text()
+    rules = css.split('/* DESKTOP FULL-HEIGHT SIDEBAR')[1]
+    desktop, mobile = rules.split('@media (max-width:1150px)')
+    assert '@media (min-width:1151px)' in desktop
+    assert 'height:auto' in desktop and 'align-self:stretch' in desktop
+    assert 'position:sticky' in desktop and 'height:100dvh' in desktop
+    assert 'position:fixed' in mobile and 'overflow-y:auto' in mobile

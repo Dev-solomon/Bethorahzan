@@ -23,6 +23,7 @@
 <div class="app-shell" id="appShell">
 <div class="sidebar-scrim" id="sidebarScrim" aria-hidden="true"></div>
 <aside class="institution-sidebar" id="institutionSidebar" aria-label="Bethorahzan main navigation">
+  <div class="institution-sidebar-inner">
   <div class="sidebar-brand"><a href="{{ url_for('home') }}" aria-label="Bethorahzan home" class="sidebar-brand-link"><img class="sidebar-logo" src="{{ url_for('static',filename='img/bethorahzan-official-emblem.png') }}" alt="Official Bethorahzan emblem" width="92" height="92"><img class="sidebar-wordmark" src="{{ url_for('static',filename='img/bethorahzan-wordmark-display.png') }}" alt="Bethorahzan official name" width="188" height="94"></a><div class="brand-declaration">GROWTH IN THREE DIMENSIONS</div></div>
   <div class="sidebar-label">THE COMMONWEALTH <span>01 / 03</span></div>
   <nav class="sidebar-navigation" aria-label="Main menu">
@@ -46,6 +47,7 @@
   </nav>
   <div class="sidebar-promo"><span class="sidebar-promo-top"><i class="bi bi-stars"></i> A PLACE TO BELONG</span><h3>Grow with<br><em>purpose.</em></h3><p>Faith. Wisdom. Service. A shared vision for the whole person.</p><a href="{{ url_for('member_dashboard') if current_user.is_authenticated else url_for('join') }}">{{ 'Your portal' if current_user.is_authenticated else 'Become a member' }} <i class="bi bi-arrow-up-right"></i></a></div>
   <div class="sidebar-copyright">BETHORAHZAN · © {{ brand_year }}<span>BODY · SOUL · SPIRIT</span></div>
+  </div>
 </aside>
 <div class="institution-content" id="institutionContent">
   <header class="institution-topbar">
