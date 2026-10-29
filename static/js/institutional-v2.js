@@ -65,6 +65,21 @@
     window.setTimeout(()=>{doc.querySelectorAll('.reveal:not(.is-visible)').forEach(el=>{if(el.getBoundingClientRect().top < window.innerHeight)el.classList.add('is-visible');});},600);
   }
 
+  // Refined ceremonial progress thread. Passive listeners keep navigation responsive.
+  const progress = doc.getElementById('readingProgress');
+  if (progress) {
+    let queued = false;
+    const updateProgress = () => {
+      const max = Math.max(0, doc.documentElement.scrollHeight - window.innerHeight);
+      progress.style.transform = `scaleX(${max ? Math.min(1,window.scrollY / max) : 0})`;
+      queued = false;
+    };
+    const requestProgress = () => { if (!queued) { queued = true; window.requestAnimationFrame(updateProgress); } };
+    window.addEventListener('scroll', requestProgress, {passive: true});
+    window.addEventListener('resize', requestProgress, {passive: true});
+    requestProgress();
+  }
+
   // Purposeful count-up: 3 dimensions, 12 generals, 4 causes (not fabricated activity numbers).
   const countNodes = [...doc.querySelectorAll('[data-count]')];
   if(countNodes.length) {

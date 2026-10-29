@@ -115,3 +115,25 @@ def test_heroku_postgres_url_uses_installed_driver():
     assert normalized_database_url('postgres://u:p@db.example:5432/bethorahzan') == 'postgresql+psycopg://u:p@db.example:5432/bethorahzan'
     assert normalized_database_url('postgresql://u:p@db.example/bethorahzan') == 'postgresql+psycopg://u:p@db.example/bethorahzan'
     assert normalized_database_url('sqlite:///bethorahzan.db') == 'sqlite:///bethorahzan.db'
+
+
+def test_official_heritage_brand_and_hero_art(client):
+    page=client.get('/')
+    assert page.status_code == 200
+    html=page.data.decode()
+    assert 'Welcome to' in html
+    assert 'hero-wordmark-plate' in html
+    assert 'brand-refinement.css' in html
+    assert 'readingProgress' in html
+    for path in ('/static/img/bethorahzan-official-emblem.png',
+                 '/static/img/bethorahzan-official-wordmark.png',
+                 '/static/img/bethorahzan-wordmark-display.png',
+                 '/static/img/hero-institution.webp',
+                 '/static/css/brand-refinement.css'):
+        assert client.get(path).status_code == 200, path
+    css=client.get('/static/css/brand-refinement.css').data.decode()
+    assert 'Times New Roman' in css
+    assert '@media (max-width:700px)' in css
+    assert '@media (max-width:360px)' in css
+    assert b'hero-institution.webp' in page.data
+

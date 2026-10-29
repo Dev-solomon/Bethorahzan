@@ -1,0 +1,169 @@
+/* BETHORAHZAN / V3 — official heraldry, classical typography, resilient full-bleed design.
+   Serif content establishes an institutional tone; restrained sans labels give a technological edge.
+   Overrides are loaded after the existing Bootstrap and v2 design sheets. */
+:root { --boz-heritage-gold: #e9b779; --boz-heritage-copper: #d27a52; --boz-antique-paper:#f1e8da; }
+html { max-width:100%; overflow-x:clip; }
+body.institution-app { font-family:"Times New Roman", Times, Georgia, serif; font-size:17px; line-height:1.63; }
+body.institution-app h1, body.institution-app h2, body.institution-app h3,
+body.institution-app h4, body.institution-app h5,
+body.institution-app .display-heading, body.institution-app .section-title {
+  font-family:"Times New Roman", Times, Georgia, serif;
+  font-weight:600; letter-spacing:-.022em;
+}
+body.institution-app p, body.institution-app .prose, body.institution-app .copy-large,
+body.institution-app .statement-copy, body.institution-app .light-sub,
+body.institution-app .feature-spotlight p, body.institution-app .dimension-card p,
+body.institution-app .site-footer p {font-family:"Times New Roman", Times, Georgia, serif;}
+/* Technical metadata and inputs stay clean and compact. */
+body.institution-app .eyebrow, body.institution-app .section-label,
+body.institution-app .chapter-number, body.institution-app .sidebar-label,
+body.institution-app .sidebar-item, body.institution-app .topbar-location,
+body.institution-app .meta-label, body.institution-app .form-label,
+body.institution-app .btn, body.institution-app .quick-jump,
+body.institution-app .dashboard-overline, body.institution-app .dimension-bottom,
+body.institution-app .sidebar-copyright, body.institution-app input,
+body.institution-app textarea, body.institution-app select {font-family:'Manrope',Arial,sans-serif;}
+body.institution-app .feature-event-body strong,
+body.institution-app .feature-event-body small,
+body.institution-app .feature-mission h2,
+body.institution-app .quick-tile h2,
+body.institution-app .quick-tile p,
+body.institution-app .sidebar-promo h3,
+body.institution-app .sidebar-promo p {font-family:"Times New Roman",Times,Georgia,serif;}
+body.institution-app .quick-tile h2{font-size:clamp(19px,1.7vw,25px);font-weight:650;letter-spacing:-.025em}
+body.institution-app .quick-tile p{font-size:14px;line-height:1.4}
+body.institution-app .feature-mission h2{font-size:clamp(29px,2.7vw,44px);line-height:1.16}
+body.institution-app .feature-event-body strong{font-size:15px;line-height:1.28}
+body.institution-app .feature-event-body small{font-size:12px}
+body.institution-app .dimension-card p{font-size:16px}
+body.institution-app .form-control,body.institution-app .form-select{font-size:14px}
+/* Genuine transparent supplied logo + framed heraldic gold relief. */
+.institution-sidebar .sidebar-brand { padding:18px 18px 18px; background:radial-gradient(ellipse at 50% 0,rgba(196,115,65,.13),transparent 65%); }
+.institution-sidebar .sidebar-brand-link {gap:12px;padding:8px 5px 6px;background:none;border:0;}
+.institution-sidebar .sidebar-logo {
+ width:clamp(88px,7.3vw,116px);height:clamp(88px,7.3vw,116px);background:none!important;
+ box-shadow:none!important;border:0;border-radius:0;object-fit:contain;
+ filter:drop-shadow(0 0 17px rgba(226,160,88,.29));
+ transition:transform .35s ease,filter .35s ease;
+}
+.institution-sidebar .sidebar-brand-link:hover .sidebar-logo {transform:translateY(-2px) scale(1.035);filter:drop-shadow(0 0 22px rgba(232,178,107,.52));}
+.institution-sidebar .sidebar-wordmark {
+ width:min(100%,215px);height:70px;object-fit:contain;
+ background:linear-gradient(130deg,#f9f4e9,#ead9c4 58%,#f7efe3)!important;
+ border:1px solid rgba(236,181,113,.42);border-radius:7px;padding:10px 10px;
+ box-shadow:0 8px 22px rgba(0,0,0,.28),inset 0 1px 0 rgba(255,255,255,.84);
+}
+.institution-sidebar .brand-declaration{font-size:9px;letter-spacing:.15em;margin-top:11px;color:#ecc197;}
+.institution-sidebar .sidebar-item{font-size:12px;}
+/* True edge-to-edge rendering regardless of oversized monitor. */
+body.institution-app,body.institution-app .institution-content,
+body.institution-app .institution-content>main {width:100%;max-width:100%;}
+body.institution-app .site-container {max-width:none!important;padding-inline:clamp(18px,2.8vw,62px);}
+body.institution-app .app-shell{max-width:100%;}
+/* Signature gold progress thread and subtle relief. */
+.institution-topbar .reading-progress{position:absolute;bottom:-1px;left:0;height:2px;width:100%;z-index:10;pointer-events:none;transform-origin:left center;transform:scaleX(0);background:linear-gradient(90deg,#9c533b,#f0c282,#9dbee0);box-shadow:0 0 15px rgba(236,178,93,.56);}
+/* Cinematic gold-emblem landmark, without the old lion artwork or fabricated statistics. */
+body.institution-app .command-hero {
+  min-height:clamp(590px,54vw,760px);
+  background:#071521;
+  padding-inline:clamp(24px,4.2vw,84px);
+}
+body.institution-app .command-hero-photo {width:83%;object-position:center 43%;filter:saturate(.93) contrast(1.08);opacity:.9;}
+body.institution-app .command-hero:before {
+ background:linear-gradient(90deg,#071521 0%,rgba(7,21,33,.99) 19%,rgba(7,21,33,.90) 39%,rgba(7,21,33,.40) 66%,rgba(7,21,33,.09) 100%),linear-gradient(0deg,#071521 1%,transparent 46%);
+}
+body.institution-app .command-hero:after {background:radial-gradient(circle at 82% 45%,rgba(222,168,100,.10),transparent 40%),linear-gradient(120deg,rgba(4,19,28,.0),rgba(10,19,29,.1));}
+body.institution-app .command-hero-content{max-width:min(620px,65%);z-index:2;}
+body.institution-app .command-hero h1 {
+ font-family:"Times New Roman",Times,Georgia,serif;
+ font-weight:500;
+ font-size:clamp(52px,5.4vw,93px);
+ letter-spacing:-.055em;
+ line-height:1.03;margin:15px 0 15px;
+ color:#fff7e9;text-shadow:0 8px 25px rgba(0,0,0,.37);
+}
+.hero-wordmark-plate {
+ display:inline-flex;align-items:center;justify-content:center;
+ max-width:100%;width:min(100%,550px);height:auto;
+ background:linear-gradient(115deg,rgba(252,246,235,.98),rgba(223,206,180,.97) 60%,rgba(251,241,222,.98));
+ border:1px solid rgba(255,219,163,.62);border-radius:12px;
+ padding:10px clamp(15px,1.9vw,26px);
+ box-shadow:0 0 0 5px rgba(211,145,78,.10),0 22px 64px rgba(0,0,0,.42),inset 0 1px 0 #fff;
+ position:relative;
+}
+.hero-wordmark-plate:after{content:"";position:absolute;inset:6px;border:1px solid rgba(116,74,52,.17);border-radius:7px;pointer-events:none;}
+.hero-wordmark-plate img{display:block;max-width:100%;width:100%;height:auto;max-height:106px;object-fit:contain;}
+body.institution-app .command-hero-copy{font-size:clamp(17px,1.25vw,20px);line-height:1.55;max-width:555px;color:#e1e7ea;margin-top:23px;}
+body.institution-app .hero-pretitle{font-family:'Manrope',Arial,sans-serif;letter-spacing:.25em;font-size:10px;color:#f1c792;}
+body.institution-app .hero-official-seal {right:clamp(22px,5vw,100px);top:clamp(98px,15%,150px);width:clamp(130px,15vw,214px);}
+body.institution-app .seal-glow{
+ background:radial-gradient(circle,#112e42 0%,#0a1c2d 73%);
+ border:1px solid #e6b178;box-shadow:0 0 0 7px #0a192dc9,0 0 0 8px #ecb7766b,0 16px 58px #000b,0 0 64px #e7a76931;
+}
+body.institution-app .seal-glow img{border-radius:0;}
+body.institution-app .mission-image {background:#f6efdf;border-color:#d9c8a8;}
+body.institution-app .mission-image img {max-height:95px;height:auto;}
+body.institution-app .footer-crest img {background:radial-gradient(circle,#f8f1df,#e5d0b5);border:1px solid #d7a275;}
+body.institution-app .mission-figure {border-radius:12px;}
+body.institution-app .hero-bottom-line {font-family:'Manrope',Arial,sans-serif;}
+/* Motion details enhance rather than block interactions. */
+@keyframes royal-gold-sheen {from{background-position:-160% 0}to{background-position:160% 0}}
+.hero-wordmark-plate:hover{box-shadow:0 0 0 5px rgba(211,145,78,.18),0 22px 64px rgba(0,0,0,.42),0 0 50px rgba(245,188,123,.17)}
+body.institution-app .feature-spotlight,body.institution-app .feature-mission{border-color:rgba(229,184,118,.28);}
+body.institution-app .quick-tile {border-color:rgba(238,193,132,.25);}
+/* Mobile-first usability: no clipped headings, cards, checkout, or admin panels. */
+@media (max-width:1150px){
+ body.institution-app .command-hero-content{max-width:70%;}
+ body.institution-app .command-hero-photo{width:100%;}
+}
+@media (max-width:900px){
+ body.institution-app .command-hero{min-height:650px;}
+ body.institution-app .command-hero h1{font-size:clamp(52px,7vw,76px);}
+ body.institution-app .command-hero-content{max-width:82%;}
+ body.institution-app .hero-official-seal{width:115px;right:23px;top:70px;}
+ body.institution-app .command-hero:before{background:linear-gradient(90deg,#071521f7,rgba(7,21,33,.86) 49%,rgba(7,21,33,.28) 100%),linear-gradient(0deg,#071521,transparent 55%)}
+}
+@media (max-width:700px){
+ body.institution-app{font-size:16px;}
+ body.institution-app .command-hero{min-height:730px;padding:235px 19px 55px;justify-content:flex-end;}
+ body.institution-app .command-hero-photo{width:100%;height:55%;object-position:center top;opacity:.95;}
+ body.institution-app .command-hero:before{background:linear-gradient(0deg,#071521 0%,rgba(7,21,33,.98) 37%,rgba(7,21,33,.46) 65%,rgba(7,21,33,.05) 100%);}
+ body.institution-app .command-hero-content{max-width:100%;}
+ body.institution-app .command-hero h1{font-size:clamp(46px,9vw,64px);margin:8px 0 12px;}
+ body.institution-app .hero-official-seal{top:18px;right:18px;width:90px;}
+ body.institution-app .hero-wordmark-plate{width:min(100%,500px);padding:10px 18px;}
+ body.institution-app .hero-wordmark-plate img{max-height:78px;}
+ body.institution-app .command-hero-copy{font-size:16px;line-height:1.48;margin-top:19px;}
+ body.institution-app .hero-pretitle{letter-spacing:.15em;font-size:8px;}
+ body.institution-app .hero-ctas{margin:20px 0 24px;}
+ body.institution-app .hero-principles{padding-top:13px;}
+ body.institution-app .quick-tile h2{font-size:19px;}
+ body.institution-app .feature-spotlight p{font-size:16px;}
+ body.institution-app .dashboard-feature-grid{gap:13px;}
+ body.institution-app .site-container{padding-inline:17px;}
+ body.institution-app .admin-main{padding:22px 15px;}
+ body.institution-app .admin-main .table-responsive{overflow-x:auto;}
+ body.institution-app .page-hero h1{font-size:clamp(35px,8vw,54px)}
+ body.institution-app .form-panel{padding:clamp(18px,4vw,30px);}
+}
+@media (max-width:420px){
+ body.institution-app .command-hero{min-height:735px;padding:242px 16px 55px;}
+ body.institution-app .command-hero h1{font-size:clamp(40px,10vw,49px);}
+ body.institution-app .hero-wordmark-plate{padding:9px 11px;}
+ body.institution-app .hero-principles{gap:0;}
+ body.institution-app .hero-principles>div{padding:0 9px;}
+ body.institution-app .quick-tile{min-height:148px;}
+ body.institution-app .quick-tile p{font-size:12px;}
+ body.institution-app .topbar-controls{gap:4px;}
+ body.institution-app .topbar-action{padding:8px 10px;}
+ body.institution-app .topbar-login{padding:8px 8px;}
+}
+@media (max-width:360px){
+ body.institution-app .topbar-login{display:none;}/* Sign in remains available from the drawer. */
+ body.institution-app .command-hero{min-height:745px;}
+ body.institution-app .hero-ctas{flex-direction:column;align-items:flex-start;}
+ body.institution-app .dashboard-feature-grid{grid-template-columns:minmax(0,1fr);}
+}
+@media (prefers-reduced-motion:reduce){
+ body.institution-app .hero-wordmark-plate,body.institution-app .sidebar-logo{transition:none;animation:none;}
+}
