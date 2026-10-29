@@ -164,11 +164,20 @@ def load_user(user_id):
     except (ValueError, TypeError): return None
 
 
+def normalized_database_url(value):
+    """Heroku URLs use postgres://; explicitly use the installed Psycopg 3 driver."""
+    if value.startswith('postgres://'):
+        return 'postgresql+psycopg://' + value[len('postgres://'):]
+    if value.startswith('postgresql://'):
+        return 'postgresql+psycopg://' + value[len('postgresql://'):]
+    return value
+
+
 def create_app(config=None):
     app = Flask(__name__)
     app.config.update(
         SECRET_KEY=os.getenv('SECRET_KEY','local-development-only-change-me'),
-        SQLALCHEMY_DATABASE_URI=os.getenv('DATABASE_URL','sqlite:///bethorahzan.db').replace('postgres://','postgresql://',1),
+        SQLALCHEMY_DATABASE_URI=normalized_database_url(os.getenv('DATABASE_URL','sqlite:///bethorahzan.db')),
         SQLALCHEMY_TRACK_MODIFICATIONS=False,
         STRIPE_SECRET_KEY=os.getenv('STRIPE_SECRET_KEY',''),
         STRIPE_PUBLISHABLE_KEY=os.getenv('STRIPE_PUBLISHABLE_KEY',''),
